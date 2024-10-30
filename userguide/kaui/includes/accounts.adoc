@@ -191,6 +191,18 @@ image::../assets/img/kaui/Account_UpdateScreen.png[width=450,align="center"]
 +
 . Click the *Save* button.
 
+[[export_account_data]]
+=== Export Account Data
+You can export the data for an account. This creates a text file with the data from all the KB tables for the particular account. Such a text file can then be sent to the KB team for debugging purpose.
+
+. Open the account on the Account page.
+. Next to Account Information, click *Export*.:
++
+image::../assets/img/kaui/Account-Export-Label.png[width=450,align="center"]
++
+. Kaui creates a text file with the account data.
+
+
 [[add_additional_contact_emails]]
 === Add Additional Contact Emails
 If a customer wants to receive email at more than one email address (which is the one defined in the *Email* field for the account), you can add more email addresses.
