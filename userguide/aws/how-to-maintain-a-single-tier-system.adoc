@@ -1,5 +1,7 @@
 = How to Maintain a Single-Tier System
 
+include::{sourcedir}/aws/includes/aws-card.adoc[]
+
 == Overview
 
 This guide explains how to maintain your single-tier Kill Bill installation on AWS.

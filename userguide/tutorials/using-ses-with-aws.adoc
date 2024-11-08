@@ -1,5 +1,7 @@
 = Using SES with AWS
 
+include::{sourcedir}/aws/includes/aws-card.adoc[]
+
 == Overview
 
 The email plugin for Kill Bill requires an SMTP server. For implementations using AWS the best choice may be Amazon's *Simple Email Service (SES)*. Amazon offers this service at little or no cost for AWS users who send moderate volumes of outgoing mail, and this is the common use case for Kill Bill clients. To prevent improper use, though, AWS may require verification of email addresses, and may require you to certify that the account will not be used to send bulk unsolicited emails.

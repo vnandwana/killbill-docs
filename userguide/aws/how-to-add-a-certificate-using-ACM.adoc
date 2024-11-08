@@ -1,5 +1,7 @@
 = How To Add a Certificate Using the AWS Certificate Manager
 
+include::{sourcedir}/aws/includes/aws-card.adoc[]
+
 == Overview
 
 
