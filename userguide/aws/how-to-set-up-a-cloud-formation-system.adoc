@@ -1,5 +1,6 @@
 = How to Set up a CloudFormation System
 
+include::{sourcedir}/aws/includes/aws-card.adoc[]
 
 == Overview
 

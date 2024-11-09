@@ -1,5 +1,6 @@
 = How to Set up a Single-Tier System
 
+include::{sourcedir}/aws/includes/aws-card.adoc[]
 
 == Introduction
 
