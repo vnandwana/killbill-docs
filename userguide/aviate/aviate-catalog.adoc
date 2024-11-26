@@ -6,7 +6,7 @@ include::{sourcedir}/aviate/includes/aviate-card.adoc[]
 
 The Aviate plugin can be used as a catalog plugin. The Aviate catalog plugin serves as an alternative to the XML catalog managed within Kill Bill core. It provides APIs that operate at the plan/product/pricelist level, offering greater flexibility and granularity compared to the catalog version level. These APIs enable users to create individual catalog entries such as plans, products, and pricelists without the need to manage entire catalog versions. The catalog data created through the plugin is stored in tables managed by the Aviate plugin.
 
-When the aviate catalog plugin features are enabled, the catalog served by the plugin takes priority over any _existing catalog entries_ created from regular KB catalog APIs (`/1.0/kb/catalog`) documented https://killbill.github.io/slate/catalog.html#upload-a-catalog-as-xml[here].
+When the Aviate catalog plugin features are enabled, the catalog served by the plugin takes priority over any _existing catalog entries_ created from regular KB catalog APIs (`/1.0/kb/catalog`) documented https://apidocs.killbill.io/catalog#upload-a-catalog-as-xml[here].
 
 == Getting Started with the Aviate Catalog Plugin
 
@@ -14,7 +14,7 @@ This section provides a step-by-step approach to get started with the Aviate Cat
 
 === Installing the Plugin
 
-The Aviate plugin can be installed as documented in the [How to Install the Aviate Plugin] doc.
+The Aviate plugin can be installed as documented in the https://docs.killbill.io/latest/how-to-install-the-aviate-plugin.html[How to Install the Aviate Plugin] doc.
 
 === Enabling Catalog APIs
 
@@ -51,7 +51,7 @@ Assuming we have the following plans, Pa, Pb, Pc, and we create those at differe
 
 *Is it possible to use the KB catalog APIs when the Aviate catalog plugin is enabled?*
 
-When the Aviate catalog plugin is enabled, the catalog state is managed by the Aviate plugin. So, while it is possible to use the `GET` https://killbill.github.io/slate/catalog.html#catalog-2[KB Catalog APIs] for catalog retrieval, it is not possible to use the upload/delete https://killbill.github.io/slate/catalog.html#catalog-2[KB Catalog APIs] endpoints.
+When the Aviate catalog plugin is enabled, the catalog state is managed by the Aviate plugin. So, while it is possible to use the `GET` https://apidocs.killbill.io/catalog[KB Catalog APIs] for catalog retrieval, it is not possible to use the upload/delete https://apidocs.killbill.io/catalog[KB Catalog APIs] endpoints.
 
 *Is it possible to use the KB price overrides feature when the Aviate catalog plugin is enabled?*
 
