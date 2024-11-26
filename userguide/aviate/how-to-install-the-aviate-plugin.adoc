@@ -12,8 +12,6 @@ include::{sourcedir}/aviate/includes/aviate-card.adoc[]
 
 == Plugin Installation
 
-The Aviate plugin is not an open-sourced plugin and hence cannot be installed using the standard https://docs.killbill.io/latest/plugin_installation#_plugin_installation[__plugin installation steps__].
-
 This section lists the steps to be followed for the Aviate plugin installation.
 
 //TODO - Steps to create the DB tables are not mentioned here, I'm assuming that com.killbill.billing.plugin.aviate.enableMigrations=true will automatically create the tables?
@@ -22,7 +20,8 @@ This section lists the steps to be followed for the Aviate plugin installation.
 
 The aviate plugin can be installed by running the following curl command:
 
-```
+[source,bash]
+----
 curl -v \
      -u admin:password \
      -H "Content-Type: application/json" \
@@ -59,7 +58,7 @@ curl -v \
          "isSystemCommandType": "true"
      }' \
      "http://127.0.0.1:8080/1.0/kb/nodesInfo"
-```
+----
 
 Replace `<token>` with your cloudsmith token. Replace `<version>` with the plugin version to be installed. This should be something like `1.0.12`.
 
@@ -67,7 +66,8 @@ Replace `<token>` with your cloudsmith token. Replace `<version>` with the plugi
 
 In order to start the plugin, run the following `curl` command:
 
-```
+[source,bash]
+----
 curl -v \
      -u admin:password \
      -H "Content-Type: application/json" \
@@ -84,23 +84,23 @@ curl -v \
          "isSystemCommandType": true
      }' \
      "http://127.0.0.1:8080/1.0/kb/nodesInfo"
-
-
-```
+----
 
 *Step 3 - Verify that the plugin is running*
 
 Run the following `curl` command:
 
-```
+[source,bash]
+----
 curl -v \
 -u admin:password \
 http://127.0.0.1:8080/1.0/kb/nodesInfo
-```
+----
 
 The output should contain an entry similar to the following:
 
-```
+[source,bash]
+----
    {
         "bundleSymbolicName": "com.kill-bill.billing.plugin.java.aviate-plugin",
         "pluginKey": "aviate-plugin",
@@ -123,7 +123,7 @@ The output should contain an entry similar to the following:
           }
         ]
       }
-```
+----
 Alternatively, you can verify this via Kaui. To do this, click on the plug icon and the kpm link. Verify that the Aviate plugin is displayed in green color in RUNNING status.
 
 == Further Reading

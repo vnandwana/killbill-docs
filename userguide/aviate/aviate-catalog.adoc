@@ -20,15 +20,14 @@ The Aviate plugin can be installed as documented in the [How to Install the Avia
 
 To use the catalog API capabilities provided by the Aviate plugin, ensure that KB is started with the following properties:
 
-```
+[source,bash]
+----
 com.killbill.billing.plugin.aviate.enableCatalogApis=true
-com.killbill.billing.plugin.aviate.enableHealthReporter=false //TODO is this required?
-com.killbill.billing.plugin.aviate.enableMigrations=true //TODO - is this required?
-```
+----
 
 === Using Catalog Plugin APIs
 
-Once the plugin is installed and enabled, you can start using the Catalog Plugin APIs. As mentioned earlier, the Aviate catalog plugin exposes endpoints that operate at a plan/product/pricelist level. These endpoints allow plan/product/pricelist creation/modification and deletion. At the time of writing, only plan-level endpoints are supported. The catalog API endpoints are documented in our https://killbill.github.io/slate/aviate-catalog-apis.html[slate docs].
+Once the plugin is installed and enabled, you can start using the Catalog Plugin APIs. As mentioned earlier, the Aviate catalog plugin exposes endpoints that operate at a plan/product/pricelist level. These endpoints allow plan/product/pricelist creation/modification and deletion. At the time of writing, only plan-level endpoints are supported. The catalog API endpoints are documented in our https://apidocs.killbill.io/aviate-catalog-apis[slate docs].
 
 == Catalog Versioning
 
@@ -38,14 +37,15 @@ Each plan stored within the Aviate catalog plugn has an associated `effectiveDat
 
 Assuming we have the following plans, Pa, Pb, Pc, and we create those at different times and modify those to allow for price changes, we get the following:
 
-```
+[source,bash]
+----
 * T1: Create Pa -> 1 catalog version v1={Pa}
 * T2: Create Pb -> 1 catalog version v1={Pa, Pb}
 * T3: Modify Pa -> 2 catalog versions v1={Pa, Pb}, v2={Pa', Pb} // Pa' with the new price
 * T4: Create Pc -> 2 catalog versions v1={Pa, Pb}, v2={Pa', Pb, Pc} // Pa' with the new price
 * T5: Modify Pb -> 3 catalog versions v1={Pa, Pb}, v2={Pa', Pb, Pc}, v3={Pa', Pb', Pc} // Pa' and Pb' with the new price
 ...
-```
+----
 
 == FAQ
 
@@ -56,6 +56,10 @@ When the Aviate catalog plugin is enabled, the catalog state is managed by the A
 *Is it possible to use the KB price overrides feature when the Aviate catalog plugin is enabled?*
 
 Yes, it is possible to use the KB price overrides feature. In other words, even if the Aviate catalog plugin is enabled, it is still possible to create a subscription with price overrides.
+
+// TODO - Add Further Reading section once we have more documentation on Aviate plugin
+
+
 
 
 
