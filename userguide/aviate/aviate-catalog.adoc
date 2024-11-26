@@ -6,121 +6,11 @@ include::{sourcedir}/aviate/includes/aviate-card.adoc[]
 
 The Aviate plugin can be used as a catalog plugin. The Aviate catalog plugin serves as an alternative to the XML catalog managed within Kill Bill core. It provides APIs that operate at the plan level, offering greater flexibility and granularity compared to the catalog version level. These APIs enable users to create individual catalog entries such as plans, products, and pricelists without the need to manage entire catalog versions. The catalog data created through the plugin is stored in tables managed by the Aviate plugin.
 
-When the aviate catalog plugin is enabled, it takes priority over any _existing catalog entries_ created from regular KB catalog APIs (`/1.0/kb/catalog`) documented https://killbill.github.io/slate/catalog.html#upload-a-catalog-as-xml[here].
+When the aviate catalog plugin features are enabled, enabled, the plugin takes priority over any _existing catalog entries_ created from regular KB catalog APIs (`/1.0/kb/catalog`) documented https://killbill.github.io/slate/catalog.html#upload-a-catalog-as-xml[here].
 
 == Installing the Plugin
 
-This section lists the steps to be followed for the aviate plugin installation.
-
-//TODO - Steps to create the DB tables are not mentioned here, I'm assuming that com.killbill.billing.plugin.aviate.enableMigrations=true will automatically create the tables?
-
-Step 1 - Install Plugin
-
-The aviate plugin can be installed by running the following curl command:
-
-```
-curl -v \
-     -u admin:password \
-     -H "Content-Type: application/json" \
-     -H 'X-Killbill-CreatedBy: admin' \
-     -X POST \
-     --data-binary '{
-         "nodeCommandProperties": [
-             {
-                 "key": "pluginKey",
-                 "value": "aviate"
-             },
-             {
-                 "key": "pluginVersion",
-                 "value": "<version>"
-             },
-             {
-                 "key": "pluginArtifactId",
-                 "value": "aviate-plugin"
-             },
-             {
-                 "key": "pluginGroupId",
-                 "value": "com.kill-bill.billing.plugin.java"
-             },
-             {
-                 "key": "pluginType",
-                 "value": "java"
-             },
-             {
-                 "key": "pluginUri",
-                 "value": "https://dl.cloudsmith.io/<token>/killbill/aviate/maven/com/kill-bill/billing/plugin/java/aviate-plugin/<version>/aviate-plugin-<version>.jar"
-             }
-         ],
-         "nodeCommandType": "INSTALL_PLUGIN",
-         "isSystemCommandType": "true"
-     }' \
-     "http://127.0.0.1:8080/1.0/kb/nodesInfo"
-```
-
-Replace `<token>` with your cloudsmith token. Replace `<version>` with the plugin version to be installed. This should be something like `1.0.12`.
-
-Step 2 - Start the Plugin
-
-In order to start the plugin, run the following `curl` command:
-
-```
-curl -v \
-     -u admin:password \
-     -H "Content-Type: application/json" \
-     -H 'X-Killbill-CreatedBy: admin' \
-     -X POST \
-     --data-binary '{
-         "nodeCommandProperties": [
-             {
-                 "key": "pluginKey",
-                 "value": "aviate"
-             }
-         ],
-         "nodeCommandType": "START_PLUGIN",
-         "isSystemCommandType": true
-     }' \
-     "http://127.0.0.1:8080/1.0/kb/nodesInfo"
-
-
-```
-
-Step 3 - Verify that the plugin is running
-
-Run the following `curl` command:
-
-```
-curl -v \
--u admin:password \
-http://127.0.0.1:8080/1.0/kb/nodesInfo
-```
-
-The output should contain an entry similar to the following:
-
-```
-   {
-        "bundleSymbolicName": "com.kill-bill.billing.plugin.java.aviate-plugin",
-        "pluginKey": "aviate-plugin",
-        "pluginName": "aviate-plugin",
-        "version": "1.0.12-SNAPSHOT",
-        "state": "RUNNING",
-        "isSelectedForStart": true,
-        "services": [
-          {
-            "serviceTypeName": "javax.servlet.Servlet",
-            "registrationName": "aviate-plugin"
-          },
-          {
-            "serviceTypeName": "org.killbill.billing.catalog.plugin.api.CatalogPluginApi",
-            "registrationName": "aviate-plugin"
-          },
-          {
-            "serviceTypeName": "org.killbill.billing.osgi.api.Healthcheck",
-            "registrationName": "aviate-plugin"
-          }
-        ]
-      }
-```
-Alternatively, you can verify this via Kaui. To do this, click on the plug icon and the kpm link. Verify that the Aviate plugin is displayed in green color in RUNNING status.
+The Aviate plugin can be installed as documented in the [How to Install the Aviate Plugin] doc.
 
 == Enabling Catalog APIs
 
@@ -129,21 +19,24 @@ To use the Catalog API capabilities provided by the Aviate plugin, ensure that K
 ```
 com.killbill.billing.plugin.aviate.enableCatalogApis=true
 com.killbill.billing.plugin.aviate.enableHealthReporter=false //TODO is this required?
+com.killbill.billing.plugin.aviate.enableMigrations=true //TODO - is this required?
 ```
 
 == Catalog APIs
 
-As mentioned earlier, the aviate catalog plugin exposes endpoints that operate at a plan/product/pricelist level. These endpoints allow plan/product/pricelist creation/modification and deletion. At the time of writing, only plan-level endpoints are supported. The catalog API endpoints are documented in our Slate docs here.
+=== Aviate Catalog Plugin APIs
 
-Note that at the time of writing, the aviate catalog plugin does not expose any endpoints for catalog retrieval. Instead, the catalog can be retrieved via the https://killbill.github.io/slate/catalog.html#catalog-2[KB Catalog APIs].
+As mentioned earlier, the Aviate catalog plugin exposes endpoints that operate at a plan/product/pricelist level. These endpoints allow plan/product/pricelist creation/modification and deletion. At the time of writing, only plan-level endpoints are supported. The catalog API endpoints are documented in our Slate docs here.
 
-== KB Catalog APIs
+=== KB Catalog APIs
 
 When the Aviate catalog plugin is enabled, the catalog state is managed by the Aviate plugin. So, while it is possible to use the `GET` https://killbill.github.io/slate/catalog.html#catalog-2[KB Catalog APIs] for catalog retrieval, it is not possible to use the upload/delete https://killbill.github.io/slate/catalog.html#catalog-2[KB Catalog APIs] endpoints.
 
 == Catalog Versioning
 
-Since the Kill Bill system internally manages catalog versions, the plugin will construct such multi-version catalog based on the entries that need to be returned. Each plan stored within the Aviate catalog plugn has an associated `effectiveDate`. The catalog versions and what they each include is based on the `plan#effectiveDate`: A new version will be created every time there is a set of changes associated with an existing Plan (e.g. price change). When this happens, a new version is created, which also includes all the previous Plans.
+Since the Kill Bill system internally manages catalog versions, the plugin will construct such multi-version catalog based on the entries that need to be returned.
+
+Each plan stored within the Aviate catalog plugn has an associated `effectiveDate`. The catalog versions and what they each include is based on the `plan#effectiveDate`: A new version will be created every time there is a set of changes associated with an existing Plan (e.g. price change). When this happens, a new version is created, which also includes all the previous Plans.
 
 Assuming we have the following plans, Pa, Pb, Pc, and we create those at different times and modify those to allow for price changes, we get the following:
 
@@ -156,8 +49,6 @@ Assuming we have the following plans, Pa, Pb, Pc, and we create those at differe
 ...
 ```
 
-
-== Further Reading
 
 
 
