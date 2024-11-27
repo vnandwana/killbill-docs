@@ -1,4 +1,4 @@
-= Aviate Catalog
+= Aviate Catalog Plugin
 
 include::{sourcedir}/aviate/includes/aviate-card.adoc[]
 
