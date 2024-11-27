@@ -1,0 +1,136 @@
+= How to Install the Aviate Plugin
+
+include::{sourcedir}/aviate/includes/aviate-card.adoc[]
+
+//TODO - Add some introduction about Aviate plugin
+
+== Prerequisites
+
+* Ensure that you have Kill Bill, Kaui, and the database set up as explained in the https://docs.killbill.io/latest/getting_started.html[__Getting Started Guide__].
+
+* Ensure that you have https://curl.haxx.se/[_cURL_] installed. If you are on Windows, we recommend that you use https://git-scm.com/download/win[_Git Bash_] to run the `cURL` commands.
+
+== Plugin Installation
+
+This section lists the steps to be followed for the Aviate plugin installation.
+
+//TODO - Steps to create the DB tables are not mentioned here, I'm assuming that com.killbill.billing.plugin.aviate.enableMigrations=true will automatically create the tables?
+
+*Step 1 - Install Plugin*
+
+The aviate plugin can be installed by running the following curl command:
+
+[source,bash]
+----
+curl -v \
+     -u admin:password \
+     -H "Content-Type: application/json" \
+     -H 'X-Killbill-CreatedBy: admin' \
+     -X POST \
+     --data-binary '{
+         "nodeCommandProperties": [
+             {
+                 "key": "pluginKey",
+                 "value": "aviate"
+             },
+             {
+                 "key": "pluginVersion",
+                 "value": "<version>"
+             },
+             {
+                 "key": "pluginArtifactId",
+                 "value": "aviate-plugin"
+             },
+             {
+                 "key": "pluginGroupId",
+                 "value": "com.kill-bill.billing.plugin.java"
+             },
+             {
+                 "key": "pluginType",
+                 "value": "java"
+             },
+             {
+                 "key": "pluginUri",
+                 "value": "https://dl.cloudsmith.io/<token>/killbill/aviate/maven/com/kill-bill/billing/plugin/java/aviate-plugin/<version>/aviate-plugin-<version>.jar"
+             }
+         ],
+         "nodeCommandType": "INSTALL_PLUGIN",
+         "isSystemCommandType": "true"
+     }' \
+     "http://127.0.0.1:8080/1.0/kb/nodesInfo"
+----
+
+Replace `<token>` with your cloudsmith token. Replace `<version>` with the plugin version to be installed. This should be something like `1.0.12`.
+
+*Step 2 - Start the Plugin*
+
+In order to start the plugin, run the following `curl` command:
+
+[source,bash]
+----
+curl -v \
+     -u admin:password \
+     -H "Content-Type: application/json" \
+     -H 'X-Killbill-CreatedBy: admin' \
+     -X POST \
+     --data-binary '{
+         "nodeCommandProperties": [
+             {
+                 "key": "pluginKey",
+                 "value": "aviate"
+             }
+         ],
+         "nodeCommandType": "START_PLUGIN",
+         "isSystemCommandType": true
+     }' \
+     "http://127.0.0.1:8080/1.0/kb/nodesInfo"
+----
+
+*Step 3 - Verify that the plugin is running*
+
+Run the following `curl` command:
+
+[source,bash]
+----
+curl -v \
+-u admin:password \
+http://127.0.0.1:8080/1.0/kb/nodesInfo
+----
+
+The output should contain an entry similar to the following:
+
+[source,bash]
+----
+   {
+        "bundleSymbolicName": "com.kill-bill.billing.plugin.java.aviate-plugin",
+        "pluginKey": "aviate-plugin",
+        "pluginName": "aviate-plugin",
+        "version": "1.0.12-SNAPSHOT",
+        "state": "RUNNING",
+        "isSelectedForStart": true,
+        "services": [
+          {
+            "serviceTypeName": "javax.servlet.Servlet",
+            "registrationName": "aviate-plugin"
+          },
+          {
+            "serviceTypeName": "org.killbill.billing.catalog.plugin.api.CatalogPluginApi",
+            "registrationName": "aviate-plugin"
+          },
+          {
+            "serviceTypeName": "org.killbill.billing.osgi.api.Healthcheck",
+            "registrationName": "aviate-plugin"
+          }
+        ]
+      }
+----
+Alternatively, you can verify this via Kaui. To do this, click on the plug icon and the kpm link. Verify that the Aviate plugin is displayed in green color in RUNNING status.
+
+== Further Reading
+
+* Aviate Overview
+* Aviate Catalog Plugin
+
+
+
+
