@@ -14,7 +14,7 @@ include::{sourcedir}/aviate/includes/aviate-card.adoc[]
 
 This section lists the steps to be followed for the Aviate plugin installation.
 
-//TODO - Steps to create the DB tables are not mentioned here, I'm assuming that com.killbill.billing.plugin.aviate.enableMigrations=true will automatically create the tables?
+Before staring with the plugin installation, ensure that you have a running KB installation as documented https://docs.killbill.io/latest/getting_started[here].
 
 *Step 1 - Install Plugin*
 
@@ -62,7 +62,20 @@ curl -v \
 
 Replace `<token>` with your cloudsmith token. Replace `<version>` with the plugin version to be installed. This should be something like `1.0.12`.
 
-*Step 2 - Start the Plugin*
+*Step 2 - Create Plugin Database Tables*
+
+In order to create the plugin tables, run the https://docs.killbill.io/latest/aviate-mysql-ddl.sql[Aviate MySQL DDL] or https://docs.killbill.io/latest/aviate-postgresql-ddl.sql[Aviate PostgreSQL DDL] depending on your database.
+
+Alternatively, you can let Flyway handle the database table creation for you. For this you need to ensure that KB is started with the following property:
+
+[source, bash]
+----
+com.killbill.billing.plugin.aviate.enableMigrations=true
+----
+
+Refer to the https://docs.killbill.io/latest/userguide_configuration.html[__Kill Bill Configuration Guide__] to know more about setting configuration properties.
+
+*Step 3 - Start the Plugin*
 
 In order to start the plugin, run the following `curl` command:
 
@@ -86,7 +99,7 @@ curl -v \
      "http://127.0.0.1:8080/1.0/kb/nodesInfo"
 ----
 
-*Step 3 - Verify that the plugin is running*
+*Step 4 - Verify that the plugin is running*
 
 Run the following `curl` command:
 
@@ -126,10 +139,16 @@ The output should contain an entry similar to the following:
 ----
 Alternatively, you can verify this via Kaui. To do this, click on the plug icon and the kpm link. Verify that the Aviate plugin is displayed in green color in RUNNING status.
 
+== FAQs
+
+**What is the aviate plugin not started even after following the steps above? **
+
+One of the possible reasons for the plugin startup failure is that the aviate database tables are not present. If you are using Flyway to create the tables, sometimes an error can occur while running the migrations. The KB logs should be able to provide more details.
+
 == Further Reading
 
 * Aviate Overview
-* Aviate Catalog Plugin
+* https://docs.killbill.io/latest/aviate-catalog-plugin[Aviate Catalog Plugin]
 
 
 
