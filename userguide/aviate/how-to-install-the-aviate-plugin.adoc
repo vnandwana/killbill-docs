@@ -64,7 +64,7 @@ Replace `<token>` with your cloudsmith token. Replace `<version>` with the plugi
 
 *Step 2 - Create Plugin Database Tables*
 
-In order to create the plugin tables, run the https://docs.killbill.io/latest/aviate-mysql-ddl.sql[Aviate MySQL DDL] or https://docs.killbill.io/latest/aviate-postfewsql-ddl.sql[Aviate PostgreSQL DDL] depending on your database.
+In order to create the plugin tables, run the https://docs.killbill.io/latest/aviate-mysql-ddl.sql[Aviate MySQL DDL] or https://docs.killbill.io/latest/aviate-postgresql-ddl.sql[Aviate PostgreSQL DDL] depending on your database.
 
 Alternatively, you can let Flyway handle the database table creation for you. For this you need to ensure that KB is started with the following property:
 
