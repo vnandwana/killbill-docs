@@ -8,7 +8,7 @@ Aviate Health is a feature provided by the Aviate plugin. It is designed to give
 
 == Getting Started with Aviate Health
 
-This section provides a step-by-step approach to get started with aviate health
+This section provides a step-by-step approach to start using Aviate Health.
 
 === Installing the Plugin
 
@@ -29,6 +29,6 @@ Refer to the https://docs.killbill.io/latest/userguide_configuration.html[__Kill
 
 === Using Health APIs
 
-As mentioned earlier, aviate health exposes endpoints that allow monitoring the health of a KB installation and fixing problems if any. The Health API endpoints are documented in our https://apidocs.killbill.io/aviate-health-apis[api docs].
+As mentioned earlier, Aviate Health exposes endpoints that allow monitoring the health of a KB installation and fixing problems if any. Once the aviate plugin is installed, you can start using the Aviate Health APIs. These are documented in our https://apidocs.killbill.io/aviate-health-apis[api docs].
 
 
