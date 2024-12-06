@@ -1,5 +1,7 @@
 == HTTPS and Certificates
 
+include::{sourcedir}/aws/includes/aws-card.adoc[]
+
 === Overview
 
 The HTTP protocol, commonly used for message exchange over the internet, does not provide encryption or authentication.

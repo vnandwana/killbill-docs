@@ -1,0 +1,155 @@
+= How to Install the Aviate Plugin
+
+include::{sourcedir}/aviate/includes/aviate-card.adoc[]
+
+//TODO - Add some introduction about Aviate plugin
+
+== Prerequisites
+
+* Ensure that you have Kill Bill, Kaui, and the database set up as explained in the https://docs.killbill.io/latest/getting_started.html[__Getting Started Guide__].
+
+* Ensure that you have https://curl.haxx.se/[_cURL_] installed. If you are on Windows, we recommend that you use https://git-scm.com/download/win[_Git Bash_] to run the `cURL` commands.
+
+== Plugin Installation
+
+This section lists the steps to be followed for the Aviate plugin installation.
+
+Before staring with the plugin installation, ensure that you have a running KB installation as documented https://docs.killbill.io/latest/getting_started[here].
+
+*Step 1 - Install Plugin*
+
+The aviate plugin can be installed by running the following curl command:
+
+[source,bash]
+----
+curl -v \
+     -u admin:password \
+     -H "Content-Type: application/json" \
+     -H 'X-Killbill-CreatedBy: admin' \
+     -X POST \
+     --data-binary '{
+         "nodeCommandProperties": [
+             {
+                 "key": "pluginKey",
+                 "value": "aviate"
+             },
+             {
+                 "key": "pluginVersion",
+                 "value": "<version>"
+             },
+             {
+                 "key": "pluginArtifactId",
+                 "value": "aviate-plugin"
+             },
+             {
+                 "key": "pluginGroupId",
+                 "value": "com.kill-bill.billing.plugin.java"
+             },
+             {
+                 "key": "pluginType",
+                 "value": "java"
+             },
+             {
+                 "key": "pluginUri",
+                 "value": "https://dl.cloudsmith.io/<token>/killbill/aviate/maven/com/kill-bill/billing/plugin/java/aviate-plugin/<version>/aviate-plugin-<version>.jar"
+             }
+         ],
+         "nodeCommandType": "INSTALL_PLUGIN",
+         "isSystemCommandType": "true"
+     }' \
+     "http://127.0.0.1:8080/1.0/kb/nodesInfo"
+----
+
+Replace `<token>` with your cloudsmith token. Replace `<version>` with the plugin version to be installed. This should be something like `1.0.12`.
+
+*Step 2 - Create Plugin Database Tables*
+
+In order to create the plugin tables, run the https://docs.killbill.io/latest/aviate-mysql-ddl.sql[Aviate MySQL DDL] or https://docs.killbill.io/latest/aviate-postgresql-ddl.sql[Aviate PostgreSQL DDL] depending on your database.
+
+Alternatively, you can let Flyway handle the database table creation for you. For this you need to ensure that KB is started with the following property:
+
+[source, bash]
+----
+com.killbill.billing.plugin.aviate.enableMigrations=true
+----
+
+Refer to the https://docs.killbill.io/latest/userguide_configuration.html[__Kill Bill Configuration Guide__] to know more about setting configuration properties.
+
+*Step 3 - Start the Plugin*
+
+In order to start the plugin, run the following `curl` command:
+
+[source,bash]
+----
+curl -v \
+     -u admin:password \
+     -H "Content-Type: application/json" \
+     -H 'X-Killbill-CreatedBy: admin' \
+     -X POST \
+     --data-binary '{
+         "nodeCommandProperties": [
+             {
+                 "key": "pluginKey",
+                 "value": "aviate"
+             }
+         ],
+         "nodeCommandType": "START_PLUGIN",
+         "isSystemCommandType": true
+     }' \
+     "http://127.0.0.1:8080/1.0/kb/nodesInfo"
+----
+
+*Step 4 - Verify that the plugin is running*
+
+Run the following `curl` command:
+
+[source,bash]
+----
+curl -v \
+-u admin:password \
+http://127.0.0.1:8080/1.0/kb/nodesInfo
+----
+
+The output should contain an entry similar to the following:
+
+[source,bash]
+----
+   {
+        "bundleSymbolicName": "com.kill-bill.billing.plugin.java.aviate-plugin",
+        "pluginKey": "aviate-plugin",
+        "pluginName": "aviate-plugin",
+        "version": "1.0.12-SNAPSHOT",
+        "state": "RUNNING",
+        "isSelectedForStart": true,
+        "services": [
+          {
+            "serviceTypeName": "javax.servlet.Servlet",
+            "registrationName": "aviate-plugin"
+          },
+          {
+            "serviceTypeName": "org.killbill.billing.catalog.plugin.api.CatalogPluginApi",
+            "registrationName": "aviate-plugin"
+          },
+          {
+            "serviceTypeName": "org.killbill.billing.osgi.api.Healthcheck",
+            "registrationName": "aviate-plugin"
+          }
+        ]
+      }
+----
+Alternatively, you can verify this via Kaui. To do this, click on the plug icon and the kpm link. Verify that the Aviate plugin is displayed in green color in RUNNING status.
+
+== FAQs
+
+**What is the aviate plugin not started even after following the steps above? **
+
+One of the possible reasons for the plugin startup failure is that the aviate database tables are not present. If you are using Flyway to create the tables, sometimes an error can occur while running the migrations. The KB logs should be able to provide more details.
+
+== Further Reading
+
+* Aviate Overview
+* https://docs.killbill.io/latest/aviate-catalog-plugin[Aviate Catalog Plugin]
+
+
+
+

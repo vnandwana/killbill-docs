@@ -1,5 +1,7 @@
 = How to Mantain a CloudFormation System
 
+include::{sourcedir}/aws/includes/aws-card.adoc[]
+
 This guide discusses how to troubleshoot, maintain and upgrade your Kill Bill CloudFormation (CFN) installation.
 
 == Logging in to your EC2s

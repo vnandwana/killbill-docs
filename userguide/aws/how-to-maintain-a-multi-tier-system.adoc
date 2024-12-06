@@ -1,5 +1,7 @@
 = How to Maintain a Multi-Tier System
 
+include::{sourcedir}/aws/includes/aws-card.adoc[]
+
 == Overview
 
 This guide explains how to maintain your multi-tier Kill Bill installation on AWS. The procedures described in this guide apply separately to each of your EC2 instances.
