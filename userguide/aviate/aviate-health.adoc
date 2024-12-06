@@ -4,7 +4,7 @@ include::{sourcedir}/aviate/includes/aviate-card.adoc[]
 
 == Introduction
 
-Aviate Health is a feature provided by the Aviate plugin. It is designed to give users valuable insights into the overall health and performance of a KillBill installation. As part of this feature, the aviate plugin exposes dedicated health-related endpoints that allow you to monitor and manage various aspects of your KillBill setup. Some of the capabilities offered by this feature include viewing detailed health metrics for all nodes within a KillBill installation, identifying and resolving issues such as stuck bus or notification entries, and generating comprehensive diagnostic reports to aid in troubleshooting and system optimization.
+Aviate Health is a feature provided by the Aviate plugin. It is designed to give users valuable insights into the overall health and performance of a Kill Bill installation. As part of this feature, the aviate plugin exposes dedicated health-related endpoints that allow you to monitor and manage various aspects of your Kill Bill setup. Some of the capabilities offered by this feature include viewing detailed health metrics for all nodes within a Kill Bill installation, identifying and resolving issues such as stuck bus or notification entries, and generating comprehensive diagnostic reports to aid in troubleshooting and system optimization.
 
 == Getting Started with Aviate Health
 
