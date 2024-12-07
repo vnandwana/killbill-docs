@@ -148,6 +148,7 @@ Note that CREDIT_ADJ items are also used to represent credits created by the use
 |1029
 |CBA_ADJ
 |
+|$20
 |2013-04-20
 |2013-04-20
 |===
