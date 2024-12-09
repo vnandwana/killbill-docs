@@ -46,7 +46,7 @@ Kill Bill generates different events when various actions occur within the syste
 5. Click on *Next: Permissions*.
 
 6. Attach the following policy to allow sending messages to SQS:
-
++
 [source]
 ----
   {
@@ -60,6 +60,7 @@ Kill Bill generates different events when various actions occur within the syste
     ]
   }
 ----
++
 
 7. Click on *Next: Tags*, add any tags if needed, and then click on *Next: Review*.
 
