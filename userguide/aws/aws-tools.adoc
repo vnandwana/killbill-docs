@@ -10,8 +10,8 @@ Several of these tools have been integrated with the AWS implementations of Kill
 
 To proceed, you should have a working Kill Bill implementation running on
 AWS, using either the
-https://docs.killbill.io/latest/aws-singletier.html[single-tier] or
-https://docs.killbill.io/latest/aws-multitier.html[multi-tier]
+https://docs.killbill.io/latest/how-to-set-up-a-single-tier-system.html[single-tier] or
+https://docs.killbill.io/latest/how-to-set-up-a-multi-tier-system.html[multi-tier]
 installation options. The single-tier option runs Kill Bill, Kaui, the
 MariaDB database, and the nginx load balancer on a single AWS EC2
 instance. This is suitable for quick deployment and for testing and
