@@ -190,7 +190,7 @@ This provides access to certain detailed resources that may be needed for mainte
 
 Congratulations! Your CloudFormation installation is ready to go!
 
-For information on troubleshooting, maintaining and upgrading your installation see https://../how-to-maintain-a-cloudformation-system.adoc[How to Maintain a CloudFormation System].
+For information on troubleshooting, maintaining and upgrading your installation see https://docs.killbill.io/latest/how-to-maintain-a-cloud-formation-system[How to Maintain a CloudFormation System].
 
 
 
