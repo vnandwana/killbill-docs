@@ -141,7 +141,7 @@ Alternatively, you can verify this via Kaui. To do this, click on the plug icon 
 
 == FAQs
 
-**What is the aviate plugin not started even after following the steps above? **
+**Why is the aviate plugin not started even after following the steps above? **
 
 One of the possible reasons for the plugin startup failure is that the aviate database tables are not present. If you are using Flyway to create the tables, sometimes an error can occur while running the migrations. The KB logs should be able to provide more details.
 

@@ -1,0 +1,55 @@
+= Aviate Custom Invoice Sequencing
+
+The Aviate Custom Invoice Sequencing feature enables the use of customized invoice numbering sequences. The core Kill Bill module uses a sequential numbering scheme for invoice numbers. This is common across accounts/tenants. While this is good enough for most use cases, some situations might require a tailored numbering sequence to meet specific business needs. This functionality is made possible through the Aviate Custom Invoice Sequencing feature.
+
+== Getting Started with Aviate Custom Invoice Sequencing
+
+This section provides a step-by-step approach to get started with Aviate Custom Invoice Sequencing.
+
+=== Installing the Aviate Plugin
+
+The Aviate plugin can be installed as documented in the https://docs.killbill.io/latest/how-to-install-the-aviate-plugin.html[How to Install the Aviate Plugin] doc.
+
+== Enabling Aviate Custom Invoice Sequencing
+
+//TODO - At the time of writing this feature also requires com.killbill.billing.plugin.aviate.enableQuoteApis=true to be set. See https://github.com/killbill/killbill-aviate-plugin/issues/290
+
+The Aviate Custom Invoicing feature requires some tenant-level configuration.  This can be done by executing the https://killbill.github.io/slate/tenant.html#add-a-per-tenant-configuration-for-a-plugin[per-tenant configuration] endpoint as follows:
+
+[source, bash]
+----
+curl -v \
+     -X POST \
+     -u admin:password \
+     -H 'X-Killbill-ApiKey: test7' \
+     -H 'X-Killbill-ApiSecret: test7' \
+     -H 'X-Killbill-CreatedBy: admin' \
+     -H 'Content-Type: text/plain' \
+     -d '!!com.killbill.billing.plugin.aviate.AviateTenantConfig
+  invoiceSequenceConfig:
+    enabled: true
+    scope: "PER_ACCOUNT" # or "PER_TENANT"
+    start: 300001
+    prefix: "INV-"
+    suffix: "-2024"' \
+    http://127.0.0.1:8080/1.0/kb/tenants/uploadPluginConfig/aviate-plugin
+----
+
+Here:
+
+* `enabled`: Specifies that custom invoice sequencing is enabled.
+* `scope`: Specifies the scope of the custom invoice sequencing. Possible values are `PER_ACCOUNT` and `PER_TENANT`. `PER_ACCOUNT` ensures that each individual account within the tenant maintains its own independent invoice number sequence starting from the `start` value defined above. `PER_TENANT` applies a shared invoice numbering sequence across the entire tenant.
+* `start`: Specifies the first value to start the invoicing with. This should be a numeric value.
+* `prefix`: Specifies the invoice prefix. This is applicable only for invoice/email templates.
+* `suffix`: Specifies the invoice suffix. This is applicable only for invoice/email templates.
+
+Once the above configuration is done, any invoices created will start with `300001` and continue forward.
+
+[NOTE]
+*Note:* At the time of writing, custom invoice sequencing is not implemented for invoice/email templates.
+
+== Using Custom Invoice Sequencing
+
+Once the above configuration is done, all the invoices generated will use the custom sequencing as can be seen in the screenshot below:
+
+image::https://github.com/killbill/killbill-docs/raw/v3/userguide/assets/img/aviate/aviate-custom-invoice-sequencing.png[align=center]
