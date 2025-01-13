@@ -40,10 +40,10 @@ Assume that we would like to track the cellphone minutes consumed by a user. We 
 [source, json]
 -----
 {
-    "name": "cell-phone-minutes",
-    "code": "cell-phone-minutes",
-	"eventKey": "minutes",
-    "aggregationType": "SUM"
+  "name": "cell-phone-minutes",
+  "code": "cell-phone-minutes",
+  "eventKey": "minutes",
+  "aggregationType": "SUM"
 }
 -----
 
@@ -57,19 +57,19 @@ For example, consider the following UsageEvents:
 -----
 # event1 - User consumed 10.5 minutes on 2025-01-01T10:30
 {
-    "billingMeterCode": "cell-phone-minutes",
-    "subscriptionId": "8e242ddd-eff9-41d9-b8ca-b2ed77b98da3",
-    "trackingId": "t1",
-    "timestamp": "2025-01-01T10:30",
-    "value": 10.5
+  "billingMeterCode": "cell-phone-minutes",
+  "subscriptionId": "8e242ddd-eff9-41d9-b8ca-b2ed77b98da3",
+  "trackingId": "t1",
+  "timestamp": "2025-01-01T10:30",
+  "value": 10.5
 }
 # event2 - User consumed 15 minutes on 2025-02-01T11:45
 {
-    "billingMeterCode": "cell-phone-minutes",
-    "subscriptionId": "8e242ddd-eff9-41d9-b8ca-b2ed77b98da3",
-    "trackingId": "t2",
-    "timestamp": "2025-02-01T11:45",
-    "value": 15
+  "billingMeterCode": "cell-phone-minutes",
+  "subscriptionId": "8e242ddd-eff9-41d9-b8ca-b2ed77b98da3",
+  "trackingId": "t2",
+  "timestamp": "2025-02-01T11:45",
+  "value": 15
 }
 -----
 The above JSON snippet specifies two UsageEvents. The value of the `value` field is aggregated based on the `aggregationType` in the associated BillingMeter. In the example above, the `SUM` aggregationType is used, so the values are added and the aggregated usage comes to `10.5+15=25.5`.
