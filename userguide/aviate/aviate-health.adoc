@@ -37,23 +37,72 @@ The Aviate plugin provides a https://killbill.github.io/slate/aviate-health-apis
 
 This section provides some insights into the metrics that can be retrieved via this endpoint.
 
+[[metrics-overview]]
 === Metrics Overview
 
 The metrics exposed by the Aviate plugin can mainly be categorized as follows:
 
 //TODO - Improve the below
 * gauge - Gauge metrics return a single numerical value per minute/hour/day (based on the value of the `granularity` parameter)
-* meter - Meter metrics provide the rate over time. It includes data for count, mean rate, 1-minute rate, 5-minute rate, and 15-minute rate.
-* timer - Timer metrics measures the rate of events and the duration of those events.
 
+* meter - Meter metrics provide the rate over time. They provide different data points for the following sample kinds:
++
+[[meterics-overview-meter]]
+|===
+|Sample Kind|Description
+
+|count
+|Monotonic increasing value since last reboot.
+
+|{one_minute/five_minute/fifteen_minute}_rate
+|Rate through a window of time.
+
+|mean_rate
+|Mean rate since last reboot.
+|===
++
+
+* timer - Timer metrics measures the rate of events and the duration of those events. They provide different data points for the following sample kinds:
++
+[[meterics-overview-timer]]
+|===
+|Sample Kind | Description
+
+|mean_rate
+|TODO
+
+|{one_minute/five_minute/fifteen_minute}_rate
+|TODO
+
+|tp99, tp999, tp75, tp98, tp95
+|TODO
+
+|min
+|TODO
+
+|max
+|TODO
+
+|count
+|TODO
+
+|median
+|TODO
+
+|std_dev
+|TODO
+
+|===
 
 === Queue Metrics
 
-Kill Bill has its own internal queues used to dispatch events. Events that are dispatched right away as a result of some internal state being created or updated are called *bus events* - e.g. a subscription_creation event is generated as a result of creating a new subscription. Events that are scheduled to be dispatched in the future are called *notifications* - e.g. invoice scheduled on a periodic basis matching account settings and plan billing periods.
+Queue metrics can be used to assess the health of the Kill Bill internal queues.
 
-The health of these internal queues is critical to maintaining correct functioning of the system and the following metrics can be used to assess the health of these queues. Note that such metrics are **global** so the `nodeName` query parameter will be ignored.
+Kill Bill has its own internal queues used to dispatch events. Events that are dispatched right away as a result of some internal state being created or updated are called *bus events* - e.g. a subscription_creation event is generated as a result of creating a new subscription. Events that are scheduled to be dispatched in the future are called *notifications* - e.g. invoice scheduled on a periodic basis matching account settings and plan billing periods.  The health of these internal queues is critical to maintaining correct functioning of the system.
 
-The queue metrics are all gauge metrics. The following table lists these metrics:
+Note that the queue metrics are **global** so the `nodeName` query parameter will be ignored. Additionally, all the queue metrics are gauge metrics and return a single value.
+
+The following table lists these metrics:
 
 |===
 |Metric Name |Description
@@ -81,7 +130,9 @@ The queue metrics are all gauge metrics. The following table lists these metrics
 
 === Logs
 
-Kill Bill is configured to output its internal logs as specified by the `logback.xml` deployed configuration. The aviate plugin running on each node extracts important information from the logs and computes some metrics to highlight potential issues with warn and error logs that have happened through time. These metrics are computed per node.
+Kill Bill is configured to output its internal logs as specified by the `logback.xml` configuration (See https://docs.killbill.io/latest/getting_started#_customizing_log_file_path[docs]). The aviate plugin running on each node extracts important information from the logs and computes some metrics to highlight potential issues with warn and error logs that have happened through time.
+
+Note that the log metrics are computed per node. Additionally, the log metrics are all meter metrics, they each provide different data points for the sample kinds listed <<meterics-overview-meter, above>>.
 
 The following table lists these metrics:
 
@@ -95,28 +146,16 @@ The following table lists these metrics:
 |Represents errors in logs
 |===
 
-The log metrics are all meter metrics, and so they each provide different data points for the following sample kinds:
-
-|===
-|Sample Kind|Description
-
-|count
-|Monotonic increasing value since last reboot.
-
-|{one_minute/five_minute/fifteen_minute}_rate
-|Rate of responses through a window of time.
-
-|mean_rate
-|Mean rate since last reboot.
-|===
 
 
 === Servlet Responses
 
 Servlet metrics provide visibility into any of the endpoints exposed by the system, either from Kill Bill core (`/1.0/kb`) or any plugins exposing endpoints. These metrics are computed per node.
 
-The servlet metrics are all meter metrics, and so they each provide different data points. The following table lists these metrics:
+// TODO - is the following correct?
+The servlet metrics are **global** so the `nodeName` query parameter will be ignored. Additionally, the servlet metrics are meter metrics, they each provide different data points for the sample kinds listed <<meterics-overview-meter, above>>.
 
+The following table lists these metrics:
 
 |===
 |Metric Name |Description
@@ -144,27 +183,11 @@ The servlet metrics are all meter metrics, and so they each provide different da
 
 |===
 
-The servlet metrics are all meter metrics, and so they each provide different data points for the following sample kinds:
-
-|===
-|Sample Kind|Description
-
-|count
-|Monotonic increasing value since last reboot.
-
-|{one_minute/five_minute/fifteen_minute}_rate
-|Rate of responses through a window of time.
-
-|mean_rate
-|Mean rate since last reboot.
-|===
-
-
 === Database Connection Pools
 
-Kill Bill uses 3 different database connection pool: `main`, `shiro`, and `osgi`. `main` and `shiro` are internal connection pools within Kill Bill core. The `osgi` connection pool is used by the plugins running on top of the Kill Bill platform for any database calls.  These metrics are computed per node.
+Kill Bill uses 3 different database connection pools: `main`, `shiro`, and `osgi`. `main` and `shiro` are internal connection pools within Kill Bill core. The `osgi` connection pool is used by the plugins running on top of the Kill Bill platform for any database calls.
 
-The following table lists the gauge metrics:
+Note that, the connection pool metrics are computed per node. Additionally, the following metrics are gauge metrics and so return a single value:
 
 |===
 |Metric Name |Description
@@ -197,8 +220,7 @@ The following table lists the gauge metrics:
 |Idle connections at time 't' for `shiro` pool
 |===
 
-The following table lists the timer metrics:
-
+The following metrics are timer metrics and provide different data points for the sample kinds listed <<meterics-overview-timer, above>>:
 
 |===
 |Metric Name |Description
@@ -214,38 +236,8 @@ The following table lists the timer metrics:
 
 |===
 
-The following table lists the sample kinds for the timer metrics:
 
-
-|===
-|Sample Kind | Description
-
-|mean_rate
-|TODO
-
-|{one_minute/five_minute/fifteen_minute}_rate
-|TODO
-
-|tp99, tp999, tp75, tp98, tp95
-|TODO
-
-|min
-|TODO
-
-|max
-|TODO
-
-|count
-|TODO
-
-|median
-|TODO
-
-|std_dev
-|TODO
-
-|===
-
+// === Retrieve Metrics Endpoint Examples
 //TODO - Add a section with sample requests and responses
 
 
