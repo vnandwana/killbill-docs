@@ -128,6 +128,40 @@ If relevant, you can click a link in the grid to view that item's detail. For ex
 
 image::../assets/img/kaui/ClickToViewDetail.png[width=650,align="center"]
 
+Kaui allows you to edit the columns displayed in a table. To do this, click on the Edit Columns button:
+
+image::../assets/img/kaui/EditColumns1.png[width=650,align="center"]
+
+This displays a new menu that lets you select the columns that you would like to view/hide:
+
+image::../assets/img/kaui/EditColumns2.png[width=650,align="center"]
+
+You can click on the checkbox next to a column name to show/hide it from the view. For example, in the screenshot below only the `Account Id`, `Name` and `External Key` columns are displayed in the table:
+
+image::../assets/img/kaui/EditColumns3.png[width=650,align="center"]
+
+You can also drag and drop a column name to change its position in the table. For example, to display the `External Key` field as the first column in the table, click the `External Key` field in the Edit Columns UI, drag it to the top of the list and drop it.
+
+image::../assets/img/kaui/EditColumns4.png[width=650,align="center"]
+
+To download the data from a table, click on the Download CSV button:
+
+image::../assets/img/kaui/DownloadCsv1.png[width=650,align="center"]
+
+This displays some additional download customizations:
+
+image::../assets/img/kaui/DownloadCsv2.png[width=650,align="center"]
+
+If you are on the accounts page and would like to download data for all the accounts created in this week, you can select `This Week` and click the Download button:
+
+image::../assets/img/kaui/DownloadCsv3.png[width=650,align="center"]
+
+On clicking the Download button, a CSV file is generated and downloaded.
+
+By default, only the fields displayed on the screen are included in the CSV. if you would like all the fields to be included, you should click the "All fields" checkbox:
+
+image::../assets/img/kaui/DownloadCsv4.png[width=650,align="center"]
+
 [[basic_search]]
 === Basic Search
 
@@ -237,3 +271,8 @@ image::../assets/img/kaui/AdvancedSearchSyntax-Labeled.png[]
 |transaction ID, external key
 
 |===
+
+=== Checking Kaui Version
+You can check the current Kaui version  by typing `\http://<your Kaui URL>/health` in the browser.  This displays the following:
+
+image::../assets/img/kaui/KauiHealth.png[width=450,align="center"]
