@@ -40,12 +40,11 @@ This section provides some insights into the metrics that can be retrieved via t
 [[metrics-overview]]
 === Metrics Overview
 
-The metrics exposed by the Aviate plugin can mainly be categorized as follows:
+The metrics exposed by the Aviate plugin can mainly be categorized in the following event groups (types):
 
-//TODO - Improve the below
-* gauge - Gauge metrics return a single numerical value per minute/hour/day (based on the value of the `granularity` parameter)
+* Gauge - A gauge return a single numerical value per minute/hour/day (based on the value of the `granularity` parameter)
 
-* meter - Meter metrics provide the rate over time. They provide different data points for the following sample kinds:
+* Meter - A meter provide the rate over time. They provide different data points for the following sample kinds:
 +
 [[meterics-overview-meter]]
 |===
@@ -62,35 +61,35 @@ The metrics exposed by the Aviate plugin can mainly be categorized as follows:
 |===
 +
 
-* timer - Timer metrics measures the rate of events and the duration of those events. They provide different data points for the following sample kinds:
+* Timer - A timer measures the rate of events and the duration of those events. They provide different data points for the following sample kinds:
 +
 [[meterics-overview-timer]]
 |===
 |Sample Kind | Description
 
 |mean_rate
-|TODO
+|Mean rate since last reboot.
 
 |{one_minute/five_minute/fifteen_minute}_rate
-|TODO
+|Rate through a window of time.
 
 |tp99, tp999, tp75, tp98, tp95
-|TODO
+|Percentile for the metrics since last reboot.
 
 |min
-|TODO
+|Min value since last reboot.
 
 |max
-|TODO
+|Max value since last reboot.
 
 |count
-|TODO
+|Monotonic increasing value since last reboot.
 
 |median
-|TODO
+|Median value since last reboot.
 
 |std_dev
-|TODO
+|Standard deviation since last reboot.
 
 |===
 
@@ -100,7 +99,7 @@ Queue metrics can be used to assess the health of the Kill Bill internal queues.
 
 Kill Bill has its own internal queues used to dispatch events. Events that are dispatched right away as a result of some internal state being created or updated are called *bus events* - e.g. a subscription_creation event is generated as a result of creating a new subscription. Events that are scheduled to be dispatched in the future are called *notifications* - e.g. invoice scheduled on a periodic basis matching account settings and plan billing periods.  The health of these internal queues is critical to maintaining correct functioning of the system.
 
-Note that the queue metrics are **global** so the `nodeName` query parameter will be ignored. Additionally, all the queue metrics are gauge metrics and return a single value.
+Note that the metrics associated with the queues are **global** (as opposed to computed per node) so the `nodeName` query parameter will be ignored. Additionally, all the queue metrics are of `Gauge` and therefore return a single value.
 
 The following table lists these metrics:
 
@@ -130,9 +129,9 @@ The following table lists these metrics:
 
 === Logs
 
-Kill Bill is configured to output its internal logs as specified by the `logback.xml` configuration (See https://docs.killbill.io/latest/getting_started#_customizing_log_file_path[docs]). The aviate plugin running on each node extracts important information from the logs and computes some metrics to highlight potential issues with warn and error logs that have happened through time.
+Kill Bill is configured to output its internal logs as specified by the `logback.xml` configuration (See https://docs.killbill.io/latest/getting_started#_customizing_log_file_path[docs]). The aviate plugin running on each node extracts important information from the logs and computes some metrics to highlight potential issues with `warn` and `error` logs that have happened through time.
 
-Note that the log metrics are computed per node. Additionally, the log metrics are all meter metrics, they each provide different data points for the sample kinds listed <<meterics-overview-meter, above>>.
+Those metrics are computed per node. Additionally, the log metrics are all `Meter` metrics, and so they each provide different time series as specified by the `Sample Kind` listed <<meterics-overview-meter, above>>.
 
 The following table lists these metrics:
 
@@ -150,10 +149,9 @@ The following table lists these metrics:
 
 === Servlet Responses
 
-Servlet metrics provide visibility into any of the endpoints exposed by the system, either from Kill Bill core (`/1.0/kb`) or any plugins exposing endpoints. These metrics are computed per node.
+Servlet metrics provide visibility into any of the endpoints exposed by the system, either from Kill Bill core (`/1.0/kb`) or any plugins exposing endpoints.
 
-// TODO - is the following correct?
-The servlet metrics are **global** so the `nodeName` query parameter will be ignored. Additionally, the servlet metrics are meter metrics, they each provide different data points for the sample kinds listed <<meterics-overview-meter, above>>.
+These metrics are computed per node. The servlet metrics are `Meter` metrics, so they each provide different time series as specified by the `Sample Kind` listed <<meterics-overview-meter, above>>.
 
 The following table lists these metrics:
 
@@ -187,7 +185,7 @@ The following table lists these metrics:
 
 Kill Bill uses 3 different database connection pools: `main`, `shiro`, and `osgi`. `main` and `shiro` are internal connection pools within Kill Bill core. The `osgi` connection pool is used by the plugins running on top of the Kill Bill platform for any database calls.
 
-Note that, the connection pool metrics are computed per node. Additionally, the following metrics are gauge metrics and so return a single value:
+The connection pool metrics are computed per node. The following metrics are `Gauge` metrics and so they return a single value:
 
 |===
 |Metric Name |Description
@@ -226,13 +224,13 @@ The following metrics are timer metrics and provide different data points for th
 |Metric Name |Description
 
 |main.pool.Wait
-|TODO
+|Wait time to get a connection from the pool.
 
 |osgi.pool.Wait
-|TODO
+|Wait time to get a connection from the pool.
 
 |shiro.pool.Wait
-|TODO
+|Wait time to get a connection from the pool.
 
 |===
 
