@@ -110,7 +110,7 @@ Migrating accounts to Kill Bill first implies that Kill Bill has been deployed a
 
 * **Templates and Translations**: Kill Bill allows to configure the system using templates (e.g. invoice html visible to customer) and for https://docs.killbill.io/latest/internationalization.html[internationalization] (e.g translating plan names in different languages).
 
-* **Payment plugins**: Kill Bill typically interacts with a payment gateway or processor through a https://docs.killbill.io/latest/payment_plugin.html[playment plugin]. We already have quite a few tested integrations out there so the work is either to test one of our payment plugins or to write a new one to integrate with the desired gateway/processor.
+* **Payment plugins**: Kill Bill typically interacts with a payment gateway or processor through a https://docs.killbill.io/latest/payment_plugin.html[payment plugin]. We already have quite a few tested integrations out there so the work is either to test one of our payment plugins or to write a new one to integrate with the desired gateway/processor.
 
 * **Overdue Configuration**: Often called dunning in billing systems, this https://docs.killbill.io/latest/overdue.html[feature] lets you control what is happening when customers don't pay. Note that there is no obligation to try reproducing existing logic from the old billing system if this one was not satisfactory as this will not directly impact migration. Instead it is advised to configure it to provide the desired results. This step could also be omitted and postponed until the end of the migration.
 
