@@ -284,8 +284,8 @@ This command generates a diagnostic file with the `killbill_configuration.data` 
 In order to include the logs in the diagnostic file, the following parameters need to be specified:
 
 * withLogs=true
-* logsDir=path of the directory from which to include the log files
-* logsFilenames=name of the log file that needs to be included. A separate `logsFilenames` parameter needs to be specified corresponding to each log file.
+* logsDir=path of the directory from which to include the log files. If unspecified, this defaults to the value of `com.killbill.billing.plugin.aviate.logsPath` property. If this property is not specified, it defaults to  `TOMCAT_HOME/logs`  where `TOMCAT_HOME` is determined via the `catalina.base` system property
+* logsFilenames=name of the log file that needs to be included. A separate `logsFilenames` parameter needs to be specified corresponding to each log file. If unspecified, this defaults to `catalina.out`.
 
 Depending on the type of KB installation, you can use different `curl` commands to include the KB logs.
 
@@ -309,9 +309,25 @@ curl -X GET \
 
 This command generates a diagnostic file with the account data and the `killbill.out`, `kaui.out` log files from the `/var/lib/killbill` directory.
 
-*Example 2*
+*Example 2*:
 
-The `logsDir` parameter defaults to `$TOMCAT_HOME/logs`. Thus, to include the `catalina.out` from the Tomcat logs directory, you can use:
+As explained earlier, if the `logsDir` parameter is not specified, it defaults to the value of the `com.killbill.billing.plugin.aviate.logsPath` property. Assuming that the KB log files are created in the `/var/lib/killbill/logs` directory and that the  `com.killbill.billing.plugin.aviate.logsPath=/var/lib/killbill/logs` property is set, you can use the following command to include the KB/Kaui log files:
+
+[source,bash]
+----
+curl -X GET \
+     -H 'X-killbill-apiKey: bob' \
+     -H 'X-killbill-apisecret: lazar' \
+     -H "Accept: application/zip"  \
+     -H "Authorization: Bearer ${ID_TOKEN}" \
+     "http://127.0.0.1:8080/plugins/aviate-plugin/v1/health/diagnostic?accountId=88edb5ba-d613-4923-84dc-b3cee1bf0b42&withLogs=true&logsFilenames=killbill.out&logsFilenames=kaui.out" -JO
+----
+
+This command generates a diagnostic file with the account data and the `killbill.out`, `kaui.out` log files from the `/var/lib/killbill/logs` directory.
+
+*Example 3*
+
+If the `com.killbill.billing.plugin.aviate.logsPath` property is not set and the `logsDir` parameter is not specified, it defaults to the `TOMCAT_HOME/logs` directory. Thus, the `localhost.2025-01-01.log` file from the Tomcat logs directory can be included using the following command:
 
 [source, bash]
 ----
@@ -320,10 +336,27 @@ curl -X GET \
      -H 'X-killbill-apisecret: lazar' \
      -H "Accept: application/zip"  \
      -H "Authorization: Bearer ${ID_TOKEN}" \
-     "http://127.0.0.1:8080/plugins/aviate-plugin/v1/health/diagnostic?accountId=88edb5ba-d613-4923-84dc-b3cee1bf0b42&withLogs=true&logsFilenames=catalina.log" -JO
+     "http://127.0.0.1:8080/plugins/aviate-plugin/v1/health/diagnostic?accountId=88edb5ba-d613-4923-84dc-b3cee1bf0b42&withLogs=true&logsFilenames=localhost.2025-01-01.log" -JO
 ----
 
-This  command generates a diagnostic file with the account data and the `catalina.log` file from the Tomcat home directory.
+This  command generates a diagnostic file with the account data and the `localhost.2025-01-01.log` file from the Tomcat home directory.
+
+*Example 4*
+
+As mentioned earlier, if the `logsFilenames` parameter is not specified, it defaults to `catalina.out`. Thus, to include this file, you can use:
+
+[source, bash]
+----
+curl -X GET \
+     -H 'X-killbill-apiKey: bob' \
+     -H 'X-killbill-apisecret: lazar' \
+     -H "Accept: application/zip"  \
+     -H "Authorization: Bearer ${ID_TOKEN}" \
+     "http://127.0.0.1:8080/plugins/aviate-plugin/v1/health/diagnostic?accountId=88edb5ba-d613-4923-84dc-b3cee1bf0b42&withLogs=true" -JO
+----
+
+This  command generates a diagnostic file with the account data and the `catalina.out` file from the Tomcat home directory.
+
 
 ==== Docker/AWS Setup
 
