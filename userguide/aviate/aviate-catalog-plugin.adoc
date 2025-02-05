@@ -29,7 +29,7 @@ Refer to the https://docs.killbill.io/latest/userguide_configuration.html[__Kill
 
 === Using Catalog Plugin APIs
 
-Once the plugin is installed and enabled, you can start using the Catalog Plugin APIs. As mentioned earlier, the Aviate catalog plugin exposes endpoints that operate at a plan/product/pricelist level. These endpoints allow plan/product/pricelist creation/modification and deletion. At the time of writing, only plan-level endpoints are supported. The catalog API endpoints are documented in our https://apidocs.killbill.io/aviate-catalog-apis[api docs].
+Once the plugin is installed and enabled, you can start using the Catalog Plugin APIs. As mentioned earlier, the Aviate catalog plugin exposes endpoints that operate at a plan/product/pricelist level. These endpoints allow plan/product/pricelist creation/modification and deletion. At the time of writing, only plan-level endpoints are supported. The catalog API endpoints are documented in our https://apidocs.killbill.io/aviate-catalog[api docs].
 
 == Catalog Versioning
 

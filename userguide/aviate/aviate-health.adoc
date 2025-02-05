@@ -29,7 +29,7 @@ Refer to the https://docs.killbill.io/latest/userguide_configuration.html[__Kill
 
 === Using Health APIs
 
-As mentioned earlier, Aviate Health exposes endpoints that allow monitoring the health of a KB installation and fixing problems if any. Once the aviate plugin is installed, you can start using the Aviate Health APIs. These are documented in our https://apidocs.killbill.io/aviate-health-apis[api docs].
+As mentioned earlier, Aviate Health exposes endpoints that allow monitoring the health of a KB installation and fixing problems if any. Once the aviate plugin is installed, you can start using the Aviate Health APIs. These are documented in our https://apidocs.killbill.io/aviate-health[api docs].
 
 == Aviate Metrics
 
