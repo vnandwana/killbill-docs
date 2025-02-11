@@ -25,30 +25,36 @@ This command creates a temporary folder with the migration SQL statements and di
 
 === Step 2 - Execute the migrations
 
-The migrations can be executed either manually or via https://flywaydb.org/[Flyway].
+The migrations can be executed either manually or using the https://documentation.red-gate.com/fd/quickstart-command-line-184127576.html[Flyway command-line tool].
 
 ==== Executing migrations manually
 
 Execute the SQL scripts obtained above directly on your database.
 
-==== Executing migrations via the Kill Bill Flywar Jar in Dev environments
+==== Executing migrations via the Flyway Command-Line Tool
 
-We publish a https://repo1.maven.org/maven2/org/kill-bill/billing/killbill-util/0.24.4/killbill-util-0.24.4-flyway.jar[killbill-flyway.jar] jar which is a wrapper around the Flyway utility and can be used to execute the migrations. In order to execute the migrations via this jar, you can do the following:
+Migrations can also be executed using the Flyway command-line tool.
 
-1. If Flyway is being used the first time, run the `baseline` command to create the `schema_history` table.
+1. *Install Flyway Command-Line Tool:*
+
+Follow the installation guide here: https://documentation.red-gate.com/fd/quickstart-command-line-184127576.html[Flyway CLI Installation].
+
+2. *Run the Baseline Command (First-Time Use Only):*
+
+If Flyway is being used the first time, run the `baseline` command to create the `flyway_schema_history` table.
 +
 *Command*
 +
 [source, bash]
 ----
-java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> -table=<plugin_name>_schema_history baseline
+flyway -url=jdbc:mysql://127.0.0.1:3306/killbill -user=<db_user> -password=<db_password> -table=<plugin_name>_schema_history baseline
 ----
 +
 *Example*
 +
 [source, bash]
 ----
-java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/killbill -user=root -password=killbill -table=analytics_schema_history baseline
+flyway -url=jdbc:mysql://127.0.0.1:3306/killbill -user=root -password=killbill -table=analytics_schema_history baseline
 ----
 
 +
@@ -58,21 +64,22 @@ java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/killbill -user=ro
 +
 [source, bash]
 ----
-java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> -locations=filesystem:<migrations_path> -table=<plugin_name>_schema_history migrate
+flyway -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> -locations=filesystem:<migrations_path> -table=<plugin_name>_schema_history migrate
 ----
 +
 *Example*
 +
 [source, bash]
 ----
-java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/killbill -user=root -password=killbill  -locations=filesystem:C:/var/migrations -table=analytics_schema_history migrate
+flyway -url=jdbc:mysql://127.0.0.1:3306/killbill -user=root -password=killbill -locations=filesystem:C:/var/migrations -table=analytics_schema_history migrate
 ----
 
-==== Executing migrations via the Kill Bill Flywar Jar in Prod environments
+
+==== Additional Notes for Production Environments
 
 In production environments, database access is often restricted and developers don’t necessarily have rights to execute DDL commands (i.e. CREATE, ALTER, DROP, etc. statements). In such cases, migrations can be executed as follows:
 
-1. Create the  `schema_history` table manually by running the following SQL statements:
+1. Create the  `<plugin_name>_schema_history` table manually by running the following SQL statements:
 +
 [source, sql]
 ----
@@ -96,30 +103,22 @@ insert into <plugin_name>_schema_history (installed_rank, version, description, 
 +
 Ensure that you replace `<plugin_name>` with the name of a plugin like `analytics`.
 +
-2. Run the `dryRunMigrate` command. This simply lists the DDL statements required for the database upgrade but does not actually run them.
+2. *Run a Dry Run (if needed for review before applying migrations):*
+
+Flyway CLI does not support dryRun directly, but you can use `-outputType=json` to review pending migrations:
 +
 *Command*
 +
 [source, bash]
 ----
-java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> -locations=filesystem:<migrations_path> -table=<plugin_name>_schema_history dryRunMigrate
+flyway -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> -table=<plugin_name>_schema_history info -outputType=json
 ----
 +
 *Example*
 +
 [source, bash]
 ----
-java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/killbill -user=root -password=killbill -locations=filesystem:C:/var/migrations -table=analytics_schema_history dryRunMigrate
+flyway -url=jdbc:mysql://127.0.0.1:3306/killbill -user=root -password=password -locations=filesystem:C:/var/migrations-table=analytics_schema_history info -outputType=json
 ----
 
-
-==== Executing migrations via the Flyway commandline tool
-
-The migrations can also be executed via the https://documentation.red-gate.com/fd/command-line-184127404.html[Flyway commandline tool] as follows:
-
-[source, bash]
-----
-flyway -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> -table=<plugin_name>_schema_history baseline # first time only
-
-flyway -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> -locations=filesystem:<migrations_path> -table=<plugin_name>_schema_history migrate
-----
+This will list pending migrations without applying them.

@@ -25,30 +25,36 @@ This command creates a temporary folder with the migration SQL statements and di
 
 === Step 2 - Execute the migrations
 
-The migrations can be executed either manually or via https://flywaydb.org/[Flyway].
+The migrations can be executed either manually or using the https://documentation.red-gate.com/fd/quickstart-command-line-184127576.html[Flyway command-line tool].
 
 ==== Executing migrations manually
 
-Execute the SQL scripts obtained above directly in database.
+Execute the SQL scripts obtained in Step 1 directly in the database.
 
-==== Executing migrations via the Kill Bill Flywar Jar in Dev environments
+==== Executing migrations via the Flyway Command-Line Tool
 
-We publish a https://repo1.maven.org/maven2/org/kill-bill/billing/killbill-util/0.24.4/killbill-util-0.24.4-flyway.jar[killbill-flyway.jar] jar which is a wrapper around the Flyway utility and can be used to execute the migrations. In order to execute the migrations via this jar, you can do the following:
+Migrations can also be executed using the Flyway command-line tool.
 
-1. If Flyway is being used the first time, run the `baseline` command to create the `schema_history` table.
+1. *Install Flyway Command-Line Tool:*
+
+Follow the installation guide here: https://documentation.red-gate.com/fd/quickstart-command-line-184127576.html[Flyway CLI Installation].
+
+2. *Run the Baseline Command (First-Time Use Only):*
+
+If Flyway is being used the first time, run the `baseline` command to create the `flyway_schema_history` table.
 +
 *Command*
 +
 [source, bash]
 ----
-java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> baseline
+flyway -url=jdbc:mysql://127.0.0.1:3306/killbill -user=<db_user> -password=<db_password> baseline
 ----
 +
 *Example*
 +
 [source, bash]
 ----
-java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/killbill -user=root -password=killbill baseline
+flyway -url=jdbc:mysql://127.0.0.1:3306/killbill -user=root -password=killbill baseline
 ----
 
 +
@@ -58,25 +64,25 @@ java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/killbill -user=ro
 +
 [source, bash]
 ----
-java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> -locations=filesystem:<migrations_path> migrate
+flyway -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> -locations=filesystem:<migrations_path> migrate
 ----
 +
 *Example*
 +
 [source, bash]
 ----
-java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/killbill -user=root -password=killbill -locations=filesystem:C:/var/migrations migrate
+flyway -url=jdbc:mysql://127.0.0.1:3306/killbill -user=root -password=killbill -locations=filesystem:C:/var/migrations migrate
 ----
 
-==== Executing migrations via the Kill Bill Flywar Jar in Prod environments
+==== Additional Notes for Production Environments
 
 In production environments, database access is often restricted and developers don’t necessarily have rights to execute DDL commands (i.e. CREATE, ALTER, DROP, etc. statements). In such cases, migrations can be executed as follows:
 
-1. Create the  `schema_history` table manually by running the following SQL statements:
+1. *Create the  `flyway_schema_history` table manually:*
 +
 [source, sql]
 ----
-CREATE TABLE `schema_history` (
+CREATE TABLE `flyway_schema_history` (
   `installed_rank` int(11) NOT NULL,
   `version` varchar(50) DEFAULT NULL,
   `description` varchar(200) NOT NULL,
@@ -88,36 +94,28 @@ CREATE TABLE `schema_history` (
   `execution_time` int(11) NOT NULL,
   `success` tinyint(1) NOT NULL,
   PRIMARY KEY (`installed_rank`),
-  KEY `schema_history_s_idx` (`success`)
+  KEY `flyway_schema_history_s_idx` (`success`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-insert into schema_history (installed_rank, version, description, type, script, installed_by, installed_on, execution_time, success) VALUES (1, 1, '<< Flyway Baseline >>', 'BASELINE', '<< Flyway Baseline >>', 'admin', NOW(), 0, 1);
+insert into flyway_schema_history (installed_rank, version, description, type, script, installed_by, installed_on, execution_time, success) VALUES (1, 1, '<< Flyway Baseline >>', 'BASELINE', '<< Flyway Baseline >>', 'admin', NOW(), 0, 1);
 ----
 +
-2. Run the `dryRunMigrate` command. This simply lists the DDL statements required for the database upgrade but does not actually run them.
+2. *Run a Dry Run (if needed for review before applying migrations):*
+
+Flyway CLI does not support dryRun directly, but you can use `-outputType=json` to review pending migrations:
 +
 *Command*
 +
 [source, bash]
 ----
-java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> -locations=filesystem:<migrations_path> dryRunMigrate
+flyway -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> info -outputType=json
 ----
 +
 *Example*
 +
 [source, bash]
 ----
-java -jar killbill-flyway.jar -url=jdbc:mysql://127.0.0.1:3306/killbill -user=root -password=password -locations=filesystem:C:/var/migrations dryRunMigrate
+flyway -url=jdbc:mysql://127.0.0.1:3306/killbill -user=root -password=password -locations=filesystem:C:/var/migrations info -outputType=json
 ----
 
-
-==== Executing migrations via the Flyway commandline tool
-
-The migrations can also be executed via the https://documentation.red-gate.com/fd/command-line-184127404.html[Flyway commandline tool] as follows:
-
-[source, bash]
-----
-flyway -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> baseline # first time only
-
-flyway -url=jdbc:mysql://127.0.0.1:3306/<db_name> -user=<db_user> -password=<db_password> -locations=filesystem:<migrations_path> migrate
-----
+This will list pending migrations without applying them.
